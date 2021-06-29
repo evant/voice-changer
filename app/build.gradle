@@ -1,0 +1,79 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdkVersion 30
+    ndkVersion "21.4.7075529"
+
+    defaultConfig {
+        applicationId "me.tatarka.voicechanger"
+        minSdkVersion 29
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.10'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.arch.core:core-runtime:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.activity:activity-ktx:1.2.3'
+    implementation("androidx.compose.runtime:runtime:$compose_version")
+    implementation 'androidx.activity:activity-compose:1.3.0-beta02'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+apply plugin: "com.github.willir.rust.cargo-ndk-android"
+
+cargoNdk {
+    targets = ["arm64"]
+    buildTypes {
+        release {
+            buildType = "release"
+        }
+        debug {
+            buildType = "debug"
+        }
+    }
+    extraCargoBuildArguments = ["--verbose"]
+}
